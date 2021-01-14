@@ -1,0 +1,21 @@
+.comments{
+  background-color: #fff;
+  margin:20px 0;
+  padding: 20px;
+  text-align: left;
+  border-radius: 5px;
+  overflow: hidden;
+  .changeListOrder{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 5px;
+  }
+  .comment-list{
+    width: 100%;
+    .ant-list-item{
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.NotFound{
+  width:100vw;
+  height: 100vh;
+  background: url(https://w.wallhaven.cc/full/y8/wallhaven-y8jjx7.png) 100% 100%;
+  background-position: center;
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h1{
+    font-size: 4rem;
+    margin-bottom: 80px;
+    color: #fff;
+    text-shadow: 0 0 5px #fff;
+  }
+  .back{
+    .ant-btn{
+      width: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 5px #fff;
+    }
+  }
+}

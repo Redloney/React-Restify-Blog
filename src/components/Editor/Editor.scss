@@ -1,0 +1,40 @@
+.editor{
+  .editor_wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    // ant-page-header
+    .ant-page-header{
+      padding: 0;
+      // .ant-page-header-back{
+      //   display: none;
+      // }
+      // .ant-page-header-heading-title{
+      //   display: none;
+      // }
+    }
+    .ant-modal-content{
+      border-radius: 10px !important;
+    }
+    .site-page-header{
+      width: 100%;
+    }
+    .editor_input{
+      width: 100%;
+      height: 150px;
+      min-height: 100px;
+      max-height: 250px;
+      margin:20px 0;
+    }
+    .button_groups{
+      align-self: flex-end;
+      .submit{
+        width: 120px;
+      }
+      margin-right: 15px;
+    }
+  }
+}

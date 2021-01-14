@@ -1,0 +1,36 @@
+@import 'reset.css/reset';
+@import 'antd/dist/antd';
+@import './font';
+
+// //滚动条整体部分
+// ::-webkit-scrollbar {
+//   background-color: #333;
+// }
+// //滚动条里面的小方块，能向上向下移动（或向左向右移动）
+// ::-webkit-scrollbar-thumb {
+//   background-color: #999999ff;
+//   border-radius: 10px;
+//   width: 5px;
+//   height: 5px;
+// }
+// //滚动条的轨道（里面装有Thumb）
+// ::-webkit-scrollbar-track {
+//   background-color: #333;
+// }
+// 滚动条的轨道的两端按钮，由于通过点击微调小方块的位置。
+// ::-webkit-scrollbar-button {
+//   background-color: #333;
+
+// }
+// //内层轨道，滚动条中间部分
+// ::-webkit-scrollbar-track-piece {
+//   background-color: #333;
+// }
+// // // 边角，即垂直滚动条和水平滚动条相交的地方
+// // ::-webkit-scrollbar-corner{
+
+// // }
+// // //两个滚动条的交汇处上用于拖动调整元素大小的小控件
+// // ::-webkit-resizer {
+
+// // }

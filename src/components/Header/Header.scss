@@ -1,0 +1,41 @@
+.header{
+  margin-top: 7rem;
+  .wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .avatar{
+      padding: 30px 0;
+      object-fit: cover;
+      filter:drop-shadow(0px 5px 5px #00000095);
+      img{
+        object-fit: cover;
+      }
+    }
+    .id{
+      a{
+        h1{
+          margin: 0;
+          font-family: Marydale;
+          letter-spacing:3px;
+          // font-size: 1.75rem;
+          font-size: clamp(1.5rem,2vw,1.75rem);
+          color: #fefefe;
+          text-align: center;
+          filter:drop-shadow(2.5px 2.5px 2px black);
+        }
+      }
+    }
+    .faithful{
+      margin: 30px 0;
+      font-family: SentyTEA;
+      letter-spacing:3px;
+      font-size: 26px;
+      font-size: clamp(20px,1.35vw,1.75vw);
+      color: #fefefe;
+      text-align: center;
+      filter:drop-shadow(2.5px 2.5px 2px black);
+    }
+  }
+}
