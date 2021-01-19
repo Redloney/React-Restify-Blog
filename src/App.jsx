@@ -9,12 +9,27 @@ import Bottom from './components/Bottom/Bottom'
 // import Player from './components/Player/Player'
 import Loading from './components/Loading/Loading'
 import { BackTop } from 'antd'
-import './styles/views/App.scss'
+import '@/assets/styles/containers/app.scss'
 
+import { get_user_address } from './api/user'
 export default class App extends React.Component {
 
   componentDidMount () {
     Aos.init()
+    this.getUserAddress()()
+  }
+
+  getUserAddress = () => {
+    return async () => {
+      const address = await get_user_address()
+      console.log(address);
+      if (address.data.status === 0) {
+        console.log('app 获取地址成功')
+        window.user_address = address.data.result
+      } else {
+        console.log('getUserAddress getting error');
+      }
+    }
   }
 
   render () {
@@ -62,7 +77,7 @@ export default class App extends React.Component {
           </BackTop>
           <Bottom />
         </BrowserRouter>
-      </div>
+      </div >
     )
   }
 }

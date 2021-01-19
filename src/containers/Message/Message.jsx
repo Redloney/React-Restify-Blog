@@ -11,6 +11,14 @@ import './Message.scss'
 import moment from 'moment';
 import 'moment/locale/zh-cn'
 
+import storage from '../../utils/storage'
+
+@connect(
+  state => state,
+  {
+    _insert, _delete
+  }
+)
 
 class MessageUI extends React.Component {
 
@@ -184,21 +192,15 @@ class MessageUI extends React.Component {
 
   render () {
     // 从 浏览器缓存中获取 没有就为空
-    const userinfo = {
-      _id: '4399',
-      nickname: '张三',
-      email: 'zhang@gmail.com',
-      pageUrl: 'www.zhang.com',
-      logined: true,
-    }
-
-
+    const userinfo = storage.get('userinfo') || {}
+    console.log('浏览器缓存中:', userinfo);
 
     const {
       insertComment,
       delComment,
       updateMessage,
-      getMore, replyTo } = this
+      getMore,
+      replyTo } = this
 
     return (
       <div className="message">
@@ -222,13 +224,15 @@ class MessageUI extends React.Component {
   }
 }
 
-export default connect(
-  // mapStateToProps
-  state => ({
-    user: state.user
-  }),
-  // mapDispatchToProps
-  {
-    _insert, _delete
-  }
-)(MessageUI)
+export default MessageUI
+
+// export default connect(
+//   // mapStateToProps
+//   state => ({
+//     user: state.user
+//   }),
+//   // mapDispatchToProps
+//   {
+//     _insert, _delete
+//   }
+// )(MessageUI)

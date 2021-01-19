@@ -3,10 +3,10 @@ import {
 } from 'react'
 
 // // 懒加载
-const Cv = lazy(() => import('../views/Cv/Cv'))
-const Blog = lazy(() => import('../views/Blog/Blog'))
-const Detail = lazy(() => import('../views/Detail/Detail'))
-const Message = lazy(() => import('../views/Message/Message'))
+const Cv = lazy(() => import('../containers/Cv/Cv'))
+const Blog = lazy(() => import('../containers/Blog/Blog'))
+const Detail = lazy(() => import('../containers/Detail/Detail'))
+const Message = lazy(() => import('../containers/Message/Message'))
 
 // 直接加载
 // import Cv from '../views/Cv/Cv'

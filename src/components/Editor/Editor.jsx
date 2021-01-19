@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { validate_user_exist, user_login } from '../../api/user'
+
 import { Button, Form, Input, Modal, Popconfirm, message, PageHeader } from 'antd'
 // import moment from 'moment';
 // import 'moment/locale/zh-cn'
@@ -98,12 +100,23 @@ class Editor extends React.Component {
       })
     }
   }
+  clearErrorMessages = (name) => {
+    return () => {
+      this.loginForm.current.setFields([
+        {
+          name,
+          errors: [],
+          validateStatus: false
+        }
+      ])
+    }
+  }
 
   // 提交留言
   insertComment = (userinfo, comment) => {
     this.props.insertComment(userinfo, comment)
   }
-  // 若用户已登录
+  // 注销登录
   logout = () => {
     return () => {
       this.setState({
@@ -111,9 +124,12 @@ class Editor extends React.Component {
           logined: false
         }
       })
+      // eslint-disable-next-line no-unused-expressions
+      this.loginForm.current === null ? null : this.loginForm.current.resetFields()
       message.success('您已注销！')
     }
   }
+
   // Modal 事件 ------------
   showModal = () => {
     return () => {
@@ -156,17 +172,16 @@ class Editor extends React.Component {
   // 确定提交
   handleOk = () => {
     return async () => {
-
-      // 设置弹出框状态 此时已经点击了确定按钮，按钮需要触发动画
       this.setState({
         model: {
           visible: true,
           confirmLoading: true,
         }
       })
-
       try {
         const userinfo = await this.loginForm.current.validateFields()
+        console.log('userinfo', userinfo);
+        // 验证格式成功设置输入框图标为通过
         this.loginForm.current.setFields([
           {
             name: 'nickname',
@@ -179,8 +194,10 @@ class Editor extends React.Component {
             validateStatus: 'success'
           }
         ])
-        // 获取用户信息成功后
-        setTimeout(() => {
+        // 发起登录请求，如用户存在则直接登录，否则创建新用户登录
+        const info = await user_login(userinfo)
+        console.log('info :', info);
+        if (info.code) {
           this.setState({
             model: {
               visible: false,
@@ -188,15 +205,15 @@ class Editor extends React.Component {
             },
             userinfo: {
               logined: true,
-              _id: Math.random(1, 999),
-              ...userinfo
+              ...info.userinfo
             }
           }, () => {
-            message.success('登录成功！')
+            this.loginForm.current.resetFields()
+            message.success(info.msg)
           })
-        }, 3000)
+        }
       } catch (errorInfo) {
-
+        console.log(errorInfo);
         this.setState({
           model: {
             visible: true,
@@ -209,28 +226,26 @@ class Editor extends React.Component {
     }
   }
 
-  // registerFinish = () => {
-  //   return () => {
-
-  //   }
-  // }
-
   // 取消
   handleCancel = () => {
     return () => {
       this.loginForm.current.resetFields()
       this.setState({
+        nicknameExtra: false,
         model: {
           visible: false
         }
       })
     }
   }
-  validate_user_exist = (user) => {
-    return new Promise((resolve, reject) => {
-      user === 'jack' ? resolve(true) : resolve(false)
-    })
-  }
+
+  // // api 校验用户是否存在
+  // validate_user_exist = (user) => {
+  //   return new Promise((resolve, reject) => {
+  //     user === 'jack' ? resolve(true) : resolve(false)
+  //   })
+  // }
+
   render () {
     // userinfo 登录凭证
     const { nickname, logined } = this.state.userinfo
@@ -263,7 +278,7 @@ class Editor extends React.Component {
             <Form name="user_register" ref={this.loginForm}
               onFinish={(v) => console.log('提交成功', v)}
               onFinishFailed={(v) => console.log('提交失败', v)}>
-              <Form.Item name='nickname' help={this.state.nicknameExtra} hasFeedback rules={[
+              <Form.Item className={this.state.nicknameExtra ? 'm-b-0' : ''} name='nickname' extra={this.state.nicknameExtra} validateTrigger='onBlur' hasFeedback rules={[
                 {
                   type: 'string',
                   required: true,
@@ -272,7 +287,8 @@ class Editor extends React.Component {
                 },
                 {
                   validator: async (rule, value, callback) => {
-                    const isPass = await this.validate_user_exist(value)
+                    const isPass = await validate_user_exist(value)
+                    console.log(isPass);
                     isPass ? this.setState({
                       nicknameExtra: '昵称已存在，请输入邮箱登录！'
                     }) : this.setState({
@@ -286,9 +302,9 @@ class Editor extends React.Component {
                   message: '昵称长度必须在1-16位之间！'
                 }
               ]} >
-                <Input addonBefore='昵称(必填)' className='nickname' placeholder="xx" ref={this.nickname} value={this.state.nickname} onChange={this.nicknameChange()} />
+                <Input addonBefore='昵称(必填)' className='nickname' placeholder="xx" ref={this.nickname} value={this.state.nickname} onChange={this.nicknameChange()} onFocus={this.clearErrorMessages('nickname')} />
               </Form.Item>
-              <Form.Item name='email' hasFeedback rules={[
+              <Form.Item name='email' validateTrigger='onBlur' hasFeedback rules={[
                 {
                   required: true,
                   message: '请输入邮箱！'
@@ -297,9 +313,9 @@ class Editor extends React.Component {
                   message: '邮箱格式必须正确！'
                 }
               ]}>
-                <Input addonBefore='邮箱(必填)' className='email' placeholder="xxx@xxx.xxx" ref={this.email} value={this.state.email} onChange={this.emailChange()} />
+                <Input addonBefore='邮箱(必填)' className='email' placeholder="xxx@xxx.xxx" ref={this.email} value={this.state.email} onChange={this.emailChange()} onFocus={this.clearErrorMessages('email')} />
               </Form.Item>
-              <Form.Item name='pageUrl' hasFeedback rules={[
+              <Form.Item name='pageUrl' validateTrigger='onBlur' hasFeedback rules={[
                 {
                   required: false,
                   min: 6,
@@ -307,7 +323,7 @@ class Editor extends React.Component {
                   type: 'url'
                 }
               ]}>
-                <Input addonBefore='主页(选填)' className='pageUrl' placeholder="http://xxx.xxx" ref={this.pageUrl} value={this.state.pageUrl} onChange={this.pageUrlChange()} />
+                <Input addonBefore='主页(选填)' className='pageUrl' placeholder="http://xxx.xxx" ref={this.pageUrl} value={this.state.pageUrl} onChange={this.pageUrlChange()} onFocus={this.clearErrorMessages('pageUrl')} />
               </Form.Item>
               {/* <Form.Item>
                 <Button type='primary' htmlType='submit'>提交</Button>
