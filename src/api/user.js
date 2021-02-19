@@ -1,60 +1,36 @@
 import axios from '../utils/axios'
-// import jsonp from 'jsonp'
 
-// api 只管调接口传参数 其他的server端再处理
-
-// 验证用户名是否存在
-export const validate_user_exist = async (nickname) => {
-    return new Promise((resolve, reject) => {
-        axios.post('/api/user/exist', { nickname }).then(res => {
-            res.data.length === 0 ? resolve(false) : resolve(true)
-        }).catch(err => {
+export const validate_user_exist = (validate) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const { data } = await axios.post('/api/user/validate', validate)
+            data.code ? resolve(true) : resolve(false)
+        } catch (err) {
             resolve(false)
-        })
-    })
-}
-
-// 用户登录 && 更新用户数据
-export const user_login = async ({ nickname, email, pageUrl }) => {
-    return new Promise((resolve, reject) => {
-        if (window.user_address) {
-            const { ad_info, ip, location } = window.user_address
-            console.log('window.user_address : ', window.user_address)
-            axios.post('/api/user/login', {
-                nickname,
-                email,
-                pageUrl,
-                address: {
-                    ip,
-                    ...ad_info,
-                    location 
-                }
-            }).then(res => {
-                console.log(res)
-                resolve(res.data)
-            }).catch(error => {
-                console.log(error)
-                reject(error)
-            })
-            console.log('用户&&地址添加成功')
-        } else {
-            axios.post('/api/user/login', {
-                nickname,
-                email,
-                pageUrl
-            }).then(res => {
-                console.log(res)
-                resolve(res.data)
-            }).catch(error => {
-                console.log(error)
-                reject(error)
-            })
-            console.log('用户添加成功')
         }
     })
 }
 
-// 通过腾讯地图api获取ip地址
+export const user_login = ({ nickname, email, weburl }) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (window.user_address) {
+                const { ip, location, ad_info } = window.user_address
+                const result = await axios.post('/api/user/login', {
+                    nickname,
+                    email,
+                    weburl,
+                    address: { ip, location, ...ad_info }
+                })
+                resolve({ ...result.data, isLogin: true })
+            }
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+// 腾讯地图api
 export const get_user_address = async () => {
     return new Promise((resolve, reject) => {
         axios({

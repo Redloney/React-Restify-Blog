@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
-import user from './reducers/user'
-import comment from './reducers/comment'
+import userinfo from './reducers/userinfo'
+import comments from './reducers/comments'
 
 export default combineReducers({
-    user,
-    comment
+    userinfo,
+    comments
 })

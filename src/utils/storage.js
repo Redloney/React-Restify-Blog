@@ -1,11 +1,11 @@
 const storage = {
-    set(key, value) {
-        localStorage.getItem(key, JSON.stringify(value))
+    set (key, value) {
+        localStorage.setItem(key, JSON.stringify(value))
     },
-    get(key) {
+    get (key) {
         return JSON.parse(localStorage.getItem(key))
     },
-    del(key) {
+    del (key) {
         localStorage.removeItem(key)
     }
 }

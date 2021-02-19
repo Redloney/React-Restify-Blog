@@ -16,19 +16,15 @@ export default class App extends React.Component {
 
   componentDidMount () {
     Aos.init()
-    this.getUserAddress()()
+    this.getUserAddress()
   }
 
-  getUserAddress = () => {
-    return async () => {
-      const address = await get_user_address()
-      console.log(address);
-      if (address.data.status === 0) {
-        console.log('app 获取地址成功')
-        window.user_address = address.data.result
-      } else {
-        console.log('getUserAddress getting error');
-      }
+  getUserAddress = async () => {
+    const address = await get_user_address()
+    if (address.data.status === 0) {
+      window.user_address = address.data.result
+    } else {
+      console.log('getUserAddress getting error');
     }
   }
 

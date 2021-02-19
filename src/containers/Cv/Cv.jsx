@@ -9,7 +9,6 @@ export default class Cv extends PureComponent {
 
   componentDidMount () {
     // 不记录滚动条位置，默认回到顶部
-    // eslint-disable-next-line no-unused-expressions
     document && document.documentElement ? document.documentElement.scrollTop = 0 : null;
   }
 

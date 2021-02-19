@@ -1,17 +1,16 @@
-.App{
-  width: 100%;
-  min-height: 100vh;
-  background-color: #333;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: center;
-  user-select: none;
-  overflow-x: hidden;
-  .main{
-    min-height: 340px;
-    padding: 15px;
-    text-align: center;
-    max-width: 800px;
-  }
+.App {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #333;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    overflow-x: hidden;
+
+    .main {
+        padding: 15px;
+        text-align: center;
+    }
 }

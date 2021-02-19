@@ -1,223 +1,151 @@
-import * as React from 'react';
-
-// import propTypes from 'prop-types'
+import * as React from 'react'
+import { message } from 'antd'
 import { connect } from 'react-redux'
-import { _insert, _delete } from '../../redux/actions/user'
-import Editor from '../../components/Editor/Editor'
-import CommentLists from '../../components/Comments/Comments'
-import { message, Tooltip } from 'antd'
-import './Message.scss'
 
-import moment from 'moment';
-import 'moment/locale/zh-cn'
+import Editor from '../../components/Editor/Editor'
+// user action creator
+import { setUserInfo, delUserInfo } from '../../redux/actions/userinfo'
+// comment action creator
+import { setComments } from '../../redux/actions/comment'
+// comment api 
+import { getComments, insertComment, deleteComment } from '../../api/comment'
+
+import { user_login } from '../../api/user'
 
 import storage from '../../utils/storage'
 
+import './Message.scss'
+
+// import storage from '../../utils/storage'
 @connect(
-  state => state,
-  {
-    _insert, _delete
-  }
+  state => state, { setUserInfo, delUserInfo, setComments }
 )
 
 class MessageUI extends React.Component {
 
-  state = {
-    data: [
-      {
-        actions: [<span key="comment-list-reply-to">回复</span>],
-        author: '小马',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip title={moment().subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().subtract(1, 'days').fromNow()}</span>
-          </Tooltip>
-        ),
-      },
-      {
-        // actions: <span key="comment-list-reply-to-0">回复</span>,
-        author: '小红',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().subtract(2, 'days').fromNow()}</span>
-          </Tooltip>
-        ),
-      }
-    ]
-  }
-
   componentDidMount () {
-    this.getMessage()
+    this.init_redux_state()
   }
 
-  // 添加用户
-  _insert = () => {
-    return () => {
-      this.props.insert({ name: this.state.name })
+  init_redux_state = async () => {
+    try {
+      console.log('init')
+      const { comments, code } = await getComments()
+      this.props.setComments(code ? comments : [])
+    } catch (err) {
+      console.warn(err)
     }
   }
 
-  // 注销用户
-  _delete = (index) => {
-    return () => {
-      this.props._delete(index)
+  login = async (userinfo) => {
+    try {
+      const { user, token, iat, exp, code, msg } = await user_login(userinfo)
+      if (code) {
+        this.props.setUserInfo({ ...user, token, iat, exp })
+        storage.set('userinfo', { ...user, token, iat, exp })
+        message.success(msg)
+        return true
+      }
+      message.warn(msg)
+      return false
+    } catch (err) {
+      console.log(err)
+      // message.success(err)
+      return false
     }
   }
+
+  // User Reducer event
+  setUserInfo = userinfo => {
+    // redux 存用户信息
+    let result = this.props.setUserInfo(userinfo)
+    console.log('setUserInfo', result)
+    this.setState({
+      userinfo: {
+        isLogin: true
+      }
+    }, () => {
+      storage.set('userinfo', this.state.userinfo)
+      console.log('处理后：', this.state.userinfo)
+    })
+  }
+
+  delUserInfo = () => {
+    // redux 删除用户信息
+    let result = this.props.delUserInfo()
+    console.log('delUserInfo', result)
+    this.setState({
+      userinfo: {}
+    })
+  }
+
+  // Component event
 
   // 添加留言
-  insertComment = (userinfo, comment) => {
-    message.success('添加留言');
-    this.setState({
-      data: [{
-        _id: userinfo._id,
-        author: userinfo.nickname,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: (
-          <p>
-            {comment}
-          </p>
-        ),
-        datetime: (
-          <Tooltip title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().subtract(2, 'days').fromNow()}</span>
-          </Tooltip>
-        )
-      }, ...this.state.data]
-    }, () => {
-      message.success(' 提交成功、谢谢你的留言 ！ ')
-    })
+  insertComment = async ({ content, replyId }) => {
+    try {
+      const _id = this.props.userinfo._id
+      const { ip, location, ad_info } = window.user_address
+      const address = { ip, location, ...ad_info }
+      const isInsert = await insertComment({ _id, content, replyId, address })
+      if (isInsert) {
+        message.success('留言成功!')
+        this.init_redux_state()
+      } else {
+        message.error('留言失败!')
+      }
+    } catch (err) {
+      console.warn(err)
+    }
   }
 
   // 删除留言
-  delComment = (id) => {
-    console.log(id);
-    this.setState({
-      data: this.state.data.filter((value, index) => {
-        return index !== id
-      })
-    }, () => {
-      message.success('删除成功！')
-    })
+  deleteComment = async (uId, _id, fId) => {
+    try {
+      const isDel = await deleteComment(uId, _id, fId)
+      if (isDel) {
+        message.success('删除成功!')
+        this.init_redux_state()
+      } else {
+        message.error('删除失败!')
+      }
+    } catch (err) {
+      console.warn(err)
+    }
   }
 
   // 修改留言
-  updateMessage = () => {
-    message.success('修改留言');
+  updateComment = () => {
+    // message.success('修改留言')
   }
 
   // 获取留言 5条 挂载时获取
-  getMessage = () => {
-    message.success('获取留言');
+  fetchComment = () => {
+    // message.success('获取留言')
   }
 
   // 获取更多留言 原5条基础上获取 
   getMore = () => {
     // message.success('获取跟多')
-    this.setState({
-      data: [...this.state.data,
-      {
-        // actions: <span key="comment-list-reply-to-0">回复</span>,
-        author: '小红',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().subtract(2, 'days').fromNow()}</span>
-          </Tooltip>
-        ),
-      },
-      {
-        // actions: <span key="comment-list-reply-to-0">回复</span>,
-        author: '小红',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().subtract(2, 'days').fromNow()}</span>
-          </Tooltip>
-        ),
-      },
-      {
-        // actions: <span key="comment-list-reply-to-0">回复</span>,
-        author: '小红',
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().subtract(2, 'days').fromNow()}</span>
-          </Tooltip>
-        ),
-      },
-      ]
-    })
-  }
-
-  // 回复留言到 id
-  replyTo = (id, comment) => {
-    message.success(id + " " + comment)
   }
 
   render () {
-    // 从 浏览器缓存中获取 没有就为空
-    const userinfo = storage.get('userinfo') || {}
-    console.log('浏览器缓存中:', userinfo);
 
-    const {
-      insertComment,
-      delComment,
-      updateMessage,
-      getMore,
-      replyTo } = this
+    const { insertComment, deleteComment, updateComment, setUserInfo, delUserInfo, getMore, replyTo, login } = this
 
     return (
       <div className="message">
-        { /** 
-         * 
-         * 编辑器参数： userinfo {} ,  
-         * 
-         * */}
-        <Editor userinfo={userinfo} insertComment={insertComment} updateMessage={updateMessage} />
-        { /** 
-         * 留言列表参数： lists [] ,
-         *  留言列表组件只接受列表数组用来遍历渲染
-         * */}
-        <CommentLists data={this.state.data}
-          delComment={delComment}
+        <Editor
+          userinfo={this.props.userinfo}
+          comments={this.props.comments}
+          insertComment={insertComment}
+          updateComment={updateComment}
+          deleteComment={deleteComment}
+          setUserInfo={setUserInfo}
+          delUserInfo={delUserInfo}
           getMore={getMore}
           replyTo={replyTo}
+          login={login}
         />
       </div>
     )
@@ -225,14 +153,3 @@ class MessageUI extends React.Component {
 }
 
 export default MessageUI
-
-// export default connect(
-//   // mapStateToProps
-//   state => ({
-//     user: state.user
-//   }),
-//   // mapDispatchToProps
-//   {
-//     _insert, _delete
-//   }
-// )(MessageUI)

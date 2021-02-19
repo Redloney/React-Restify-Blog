@@ -1,5 +1,5 @@
-// import 'babel-polyfill'
-// import 'core-js'
+import 'babel-polyfill'
+import 'core-js'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -11,7 +11,6 @@ import { Provider } from 'react-redux'
 import store from './redux/index'
 
 import '@/assets/styles/base.scss'
-
 
 ReactDOM.render(
   // <React.StrictMode>

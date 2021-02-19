@@ -1,5 +1,5 @@
-@import 'reset.css/reset';
-@import 'antd/dist/antd';
+// @import 'reset.css/reset';
+// @import 'antd/dist/antd';
 @import './font';
 
 // //滚动条整体部分
@@ -34,3 +34,10 @@
 // // ::-webkit-resizer {
 
 // // }
+
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style-type: none;
+}

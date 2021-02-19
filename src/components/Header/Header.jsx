@@ -7,7 +7,8 @@ import NavBar from '../Navgation/NavBar'
 
 import { Link } from 'react-router-dom'
 
-import img from './preview.png'
+// import img from './preview.png'
+import img from './img.png'
 
 const Header = () => {
   return (
