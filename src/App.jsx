@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Suspense } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import Aos from 'aos/dist/aos.js'
 import 'aos/dist/aos.css'
 import routers from './routers/routers'
@@ -31,7 +31,7 @@ export default class App extends React.Component {
   render () {
     return (
       <div className="App">
-        <BrowserRouter>
+        <HashRouter>
           <Header />
           <main className="main">
             <Switch>
@@ -72,7 +72,7 @@ export default class App extends React.Component {
             </div>
           </BackTop>
           <Bottom />
-        </BrowserRouter>
+        </HashRouter>
       </div >
     )
   }

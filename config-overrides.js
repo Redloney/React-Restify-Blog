@@ -1,4 +1,4 @@
-const { override, fixBabelImports, addWebpackAlias, addDecoratorsLegacy } = require('customize-cra')
+const { override, fixBabelImports, addWebpackAlias, addDecoratorsLegacy, addWebpackModuleRule } = require('customize-cra')
 const path = require("path");
 
 module.exports = override(
@@ -10,5 +10,9 @@ module.exports = override(
         libraryDirectory: 'es',
         style: 'css'
     }),
-    addDecoratorsLegacy()
+    addDecoratorsLegacy(),
+    addWebpackModuleRule({
+        test: /\.md$/,
+        use: 'raw-loader'
+    })
 )

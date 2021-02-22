@@ -1,24 +1,8 @@
-.blog{
-  .section{
-    .content{
-      margin: 0 auto;
-      text-align: left;
-      width: min(600px,70%);
-      background-color: white;
-      padding: 3em;
-      box-shadow: 0 0 3em black;
-      // width: 70%;
-      // max-width: 600px;
-      .title{
-        margin: 0 0 .5em;
-        font-weight: 800;
-        color: rgb(255, 156, 42);
-        font-size: clamp(1.7rem,1.5%,1.25rem);
+.blog {
+    width: 100%;
+    background-color: rgb(154, 222, 245);
 
-      }
-      p{
-        font-size: clamp(1rem,1.5vw,1.25rem);
-      }
+    .section {
+        padding: 15px;
     }
-  }
 }

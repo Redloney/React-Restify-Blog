@@ -1,32 +1,49 @@
 .cv {
-    width: 800px;
-    min-width: 800px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    filter: drop-shadow(0 0 5px #333333);
+
+    * {
+        transition: all 500ms linear;
+    }
 
     .section {
-        padding: 15px;
-        background-color: #fff;
+        padding: 15px 15px 0;
 
-        .title {
-            font-size: 15px;
-            color: #333;
-            margin-left: -15px;
-            text-align: left;
-            padding-left: 15px;
-            border-left: 4px solid #f36;
+        &:last-of-type {
+            padding: 15px;
         }
 
-        .info {
-            .row {
-                display: flex;
+        .title {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 30px;
+            color: #333;
+            text-align: left;
+            padding-left: 15px;
+            margin-left: -15px;
+            border-left: 6px solid deepskyblue;
+        }
 
-                .m-b-20 {
-                    margin-bottom: 20px !important;
-                }
+        .ant-row {
+            text-align: left;
+            border-radius: 5px;
+            background-color: #d1d8e063;
+            overflow: hidden;
 
-                .col-4 {
-                    flex-basis: 40%;
+            .ant-col {
+                padding: 10px;
+                color: #333;
+
+                a {
+                    color: #333;
                 }
             }
         }
+
     }
 }

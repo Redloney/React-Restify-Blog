@@ -17,9 +17,7 @@ import storage from '../../utils/storage'
 import './Message.scss'
 
 // import storage from '../../utils/storage'
-@connect(
-  state => state, { setUserInfo, delUserInfo, setComments }
-)
+@connect(state => state, { setUserInfo, delUserInfo, setComments })
 
 class MessageUI extends React.Component {
 
@@ -27,9 +25,12 @@ class MessageUI extends React.Component {
     this.init_redux_state()
   }
 
+  checkToken = () => {
+    return true
+  }
+
   init_redux_state = async () => {
     try {
-      console.log('init')
       const { comments, code } = await getComments()
       this.props.setComments(code ? comments : [])
     } catch (err) {
