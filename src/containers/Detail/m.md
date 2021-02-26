@@ -1,197 +1,70 @@
-# React+Redux+Ts+Antd+Webpack+Koa 构建个人博客
+# Getting Started with Create React App
 
-> ##### 技术选型：react + redux + antd + ts + webpack + koa
-> ##### 实现效果：个人博客网页展示，兼容移动端
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## 写在前面
+## Available Scripts
 
-- 身为一名前端er，博客是必须的，这也是写这个项目的初衷。
-- 整个项目分为三个部分：博客前端页面、Koa服务端、博客后台系统。
-- 该项目包含博客前端页面代码，以及Koa服务器代码。博客的后台系统后续逐渐开放。
-- 一直在自己瞎写，功能还很少。欢迎各位给我提意见和建议~ :blush: 
-- [点这里给我留言](https://redspite.com/comments) 
-  
-## 线上预览
+In the project directory, you can run:
 
+### `yarn start`
 
-  [https://www.redspite.com](https://www.redspite.com)
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-## 主要功能
+### `yarn test`
 
- **博客前端** 
-- [x] 个人简历展示
-- [x] 文章列表分页
-- [x] 文章详情
-- [x] 访客登陆、登出
-- [x] 留言添加、删除
-- [x] 留言列表分页
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-**Koa服务端** 
-- [x] 用户账号创建、登陆登出
-- [x] 文章增删改查
-- [x] 留言增删改查 
-- [x] 留言关键字过滤
-- [x] 留言被回复时发送邮件通知
+### `yarn build`
 
-**后台系统（代码未上传）**
-- [x] 管理员登陆登出
-- [x] 文章创建、删除、修改
-- [x] 留言统计、留言关键字过滤
-- [x] 访客统计
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-## 技术栈
-- [x] react
-- [x] redux
-- [x] react-redux
-- [x] react-router
-- [x] redux-thunk
-- [x] ant-design
-- [x] typescript
-- [x] webpack
-- [x] Koa
-- [x] MongoDB
-- [x] Mongoose
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## 本地预览
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-  **下载** 
+### `yarn eject`
 
-    git clone https://github.com/Redspitee/React_Koa_Blog.git
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-  **博客前端运行** 
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-    yarn install  
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-    yarn start 
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-  **服务器运行** 
+## Learn More
 
-    cd server
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-    yarn install  
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-    node index
-    
-## 文件结构
+### Code Splitting
 
-```
-BLOG
-│  .babelrc
-│  .gitignore
-│  package-lock.json
-│  package.json
-│  README.en.md
-│  README.md
-│  tsconfig.json
-│  yarn.lock
-│  
-├─config
-│  │  env.js
-│  │  paths.js
-│  │  webpack.config.js
-│  │  webpackDevServer.config.js
-│  │  
-│  └─jest
-│          cssTransform.js
-│          fileTransform.js
-│                
-├─public
-│  │    favicon.ico
-│  │    index.html
-│  │    manifest.json
-│  └─uploads
-│      
-├─scripts
-│      build.js
-│      start.js
-│      test.js
-│
-├─server
-│  ├─db
-│  ├─routers
-│  ├─utils
-│  └─www
-│      ├─static
-│      │  ├─css
-│      │  ├─js
-│      │  └─media
-│      └─uploads      
-└─src
-    │  bg.jpg
-    │  declare_modules.d.ts
-    │  font.less
-    │  index.less
-    │  index.tsx
-    │  react-app-env.d.ts
-    │  serviceWorker.ts
-    │  
-    ├─api
-    │      api.js
-    │      
-    ├─components
-    │  ├─Bjq
-    │  │  │  bjq.less
-    │  │  │  Bjq.tsx
-    │  │  │  
-    │  │  ├─CommentList
-    │  │  │      commentlist.less
-    │  │  │      CommentList.tsx
-    │  │  │      
-    │  │  └─img
-    │  │          icons.png
-    │  │          
-    │  ├─Bottom
-    │  │      bottom.less
-    │  │      Bottom.tsx
-    │  │      
-    │  ├─Gotop
-    │  │      gotop.less
-    │  │      Gotop.tsx
-    │  │      top.png
-    │  │      
-    │  ├─Header
-    │  │      header.jpg
-    │  │      header.less
-    │  │      Header.tsx
-    │  │      
-    │  ├─List
-    │  │      list.less
-    │  │      List.tsx
-    │  │      pic.jpg
-    │  │      
-    │  ├─Music
-    │  │      bgm.mp3
-    │  │      music.less
-    │  │      music.png
-    │  │      Music.tsx
-    │  │      
-    │  └─Toast
-    │          toast.less
-    │          Toast.tsx
-    │          
-    ├─containers
-    │  ├─Comments
-    │  │      Comments.tsx
-    │  │      
-    │  ├─Cv
-    │  │      cv.less
-    │  │      Cv.tsx
-    │  │      
-    │  ├─Detail
-    │  │      content.txt
-    │  │      detail.less
-    │  │      Detail.tsx
-    │  │      
-    │  └─Home
-    │          Home.tsx
-    │          
-    ├─reducer
-    │      artical.redux.js
-    │      comment.redux.js
-    │      index.js
-    │      user.redux.js
-    │      
-    └─routers
-            routers.js
-```
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `yarn build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -5,9 +5,9 @@ module.exports = function(app) {
         createProxyMiddleware('/api', {
             target: 'http://localhost:8088',
             changeOrigin: true,
-            // pathRewrite: {
-            //     '^/api': ''
-            // }
+            pathRewrite: {
+                '^/api': ''
+            }
         }),
         createProxyMiddleware('/map', {
             target: 'https://apis.map.qq.com/ws/location/v1/ip',
